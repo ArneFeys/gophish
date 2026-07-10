@@ -80,6 +80,7 @@ func (as *Server) registerRoutes() {
 	router.HandleFunc("/users/", mid.Use(as.Users, mid.RequirePermission(models.PermissionModifySystem)))
 	router.HandleFunc("/users/{id:[0-9]+}", mid.Use(as.User))
 	router.HandleFunc("/util/send_test_email", as.SendTestEmail)
+	router.HandleFunc("/util/check_host", as.CheckHostConnectivity)
 	router.HandleFunc("/import/group", as.ImportGroup)
 	router.HandleFunc("/import/email", as.ImportEmail)
 	router.HandleFunc("/import/site", as.ImportSite)
