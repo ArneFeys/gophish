@@ -125,6 +125,7 @@ func (as *Server) GroupSummary(w http.ResponseWriter, r *http.Request) {
 	switch {
 	case r.Method == "GET":
 		vars := mux.Vars(r)
+		// TODO: Return a bad request response when the group ID is invalid.
 		id, _ := strconv.ParseInt(vars["id"], 0, 64)
 		g, err := models.GetGroupSummary(id, ctx.Get(r, "user_id").(int64))
 		if err != nil {
