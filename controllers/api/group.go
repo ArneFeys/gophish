@@ -1,5 +1,5 @@
 package api
-
+// hallo hallo hallo
 import (
 	"encoding/json"
 	"net/http"
@@ -47,6 +47,19 @@ func (as *Server) Groups(w http.ResponseWriter, r *http.Request) {
 		}
 		JSONResponse(w, g, http.StatusCreated)
 	}
+}
+
+// GroupsSearch returns the groups owned by the current user whose name matches
+// the "q" query string parameter.
+func (as *Server) GroupsSearch(w http.ResponseWriter, r *http.Request) {
+	q := r.URL.Query().Get("q")
+	gs, err := models.SearchGroups(q, ctx.Get(r, "user_id").(int64))
+	if err != nil {
+		log.Error(err)
+		JSONResponse(w, models.Response{Success: false, Message: "No groups found"}, http.StatusNotFound)
+		return
+	}
+	JSONResponse(w, gs, http.StatusOK)
 }
 
 // GroupsSummary returns a summary of the groups owned by the current user.
