@@ -13,7 +13,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-// test commit 1
+// test commit 4
 // Groups returns a list of groups if requested via GET.
 // If requested via POST, APIGroups creates a new group and returns a reference to it.
 func (as *Server) Groups(w http.ResponseWriter, r *http.Request) {
