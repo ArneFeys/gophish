@@ -133,10 +133,35 @@ func SearchGroups(query string, uid int64) ([]Group, error) {
 		log.Error(err)
 		return gs, err
 	}
+	if len(gs) == 0 {
+		return gs, nil
+	}
+	groupIds := make([]int64, len(gs))
 	for i := range gs {
-		gs[i].Targets, err = GetTargets(gs[i].Id)
-		if err != nil {
-			log.Error(err)
+		groupIds[i] = gs[i].Id
+	}
+	type targetWithGroup struct {
+		Target
+		GroupId int64 `gorm:"column:group_id"`
+	}
+	var allTargets []targetWithGroup
+	err = db.Table("targets").
+		Select("targets.id, targets.email, targets.first_name, targets.last_name, targets.position, gt.group_id").
+		Joins("left join group_targets gt ON targets.id = gt.target_id").
+		Where("gt.group_id IN (?)", groupIds).
+		Scan(&allTargets).Error
+	if err != nil {
+		log.Error(err)
+		return gs, err
+	}
+	targetsByGroup := make(map[int64][]Target)
+	for _, t := range allTargets {
+		targetsByGroup[t.GroupId] = append(targetsByGroup[t.GroupId], t.Target)
+	}
+	for i := range gs {
+		gs[i].Targets = targetsByGroup[gs[i].Id]
+		if gs[i].Targets == nil {
+			gs[i].Targets = []Target{}
 		}
 	}
 	return gs, nil
