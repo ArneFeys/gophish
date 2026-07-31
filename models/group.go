@@ -145,11 +145,11 @@ func SearchGroups(query string, uid int64) ([]Group, error) {
 		GroupId int64 `gorm:"column:group_id"`
 	}
 	var allTargets []targetWithGroup
-	err = db.Table("targets").
+	targetsQuery := db.Table("targets").
 		Select("targets.id, targets.email, targets.first_name, targets.last_name, targets.position, gt.group_id").
 		Joins("left join group_targets gt ON targets.id = gt.target_id").
-		Where("gt.group_id IN (?)", groupIds).
-		Scan(&allTargets).Error
+		Where("gt.group_id IN (?)", groupIds)
+	err = targetsQuery.Scan(&allTargets).Error
 	if err != nil {
 		log.Error(err)
 		return gs, err
