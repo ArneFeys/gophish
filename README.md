@@ -17,7 +17,7 @@ Installation of Gophish is dead-simple - just download and extract the zip conta
 **If you are building from source, please note that Gophish requires Go v1.10 or above!**
 
 To build Gophish from source, simply run ```git clone https://github.com/gophish/gophish.git``` and ```cd``` into the project source directory. Then, run ```go build```. After this, you should have a binary called ```gophish``` in the current directory.
-
+test
 ### Docker
 You can also use Gophish via the official Docker container [here](https://hub.docker.com/r/gophish/gophish/).
 
