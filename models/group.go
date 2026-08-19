@@ -126,8 +126,21 @@ func GetGroups(uid int64) ([]Group, error) {
 // the provided search term.
 func SearchGroups(query string, uid int64) ([]Group, error) {
 	gs := []Group{}
-	where := fmt.Sprintf("user_id=%d and name LIKE '%%%s%%'", uid, query)
-	err := db.Where(where).Find(&gs).Error
+func SearchGroups(query string, uid int64) ([]Group, error) {
+	gs := []Group{}
+	err := db.Where("user_id = ? and name LIKE ?", uid, "%"+query+"%").Find(&gs).Error
+	if err != nil {
+		log.Error(err)
+		return gs, err
+	}
+	for i := range gs {
+		gs[i].Targets, err = GetTargets(gs[i].Id)
+		if err != nil {
+			log.Error(err)
+		}
+	}
+	return gs, nil
+}
 	if err != nil {
 		log.Error(err)
 		return gs, err
