@@ -126,8 +126,7 @@ func GetGroups(uid int64) ([]Group, error) {
 // the provided search term.
 func SearchGroups(query string, uid int64) ([]Group, error) {
 	gs := []Group{}
-	where := fmt.Sprintf("user_id=%d and name LIKE '%%%s%%'", uid, query)
-	err := db.Where(where).Find(&gs).Error
+	err := db.Where("user_id = ? AND name LIKE ?", uid, "%"+query+"%").Find(&gs).Error
 	if err != nil {
 		log.Error(err)
 		return gs, err
