@@ -43,6 +43,7 @@ func ParseMail(r *http.Request) (email.Email, error) {
 	return e, err
 }
 
+// hello bot!
 // ParseCSV parses a CSV file and returns the parsed targets.
 // TODO: Add support for CSV files that do not contain a header row.
 func ParseCSV(r *http.Request) ([]models.Target, error) {
