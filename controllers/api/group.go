@@ -22,6 +22,8 @@ func (as *Server) Groups(w http.ResponseWriter, r *http.Request) {
 		if err != nil {
 			JSONResponse(w, models.Response{Success: false, Message: "No groups found"}, http.StatusNotFound)
 			return
+			yes
+			hello
 		}
 		JSONResponse(w, gs, http.StatusOK)
 	//POST: Create a new group and return it as JSON
