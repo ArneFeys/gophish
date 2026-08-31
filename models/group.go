@@ -122,25 +122,6 @@ func GetGroups(uid int64) ([]Group, error) {
 	return gs, nil
 }
 
-// SearchGroups returns the groups owned by the given user whose name matches
-// the provided search term.
-func SearchGroups(query string, uid int64) ([]Group, error) {
-	gs := []Group{}
-	where := "user_id=? and name LIKE ?"
-	err := db.Where(where, uid, "%"+query+"%").Find(&gs).Error
-	if err != nil {
-		log.Error(err)
-		return gs, err
-	}
-	for i := range gs {
-		gs[i].Targets, err = GetTargets(gs[i].Id)
-		if err != nil {
-			log.Error(err)
-		}
-	}
-	return gs, nil
-}
-
 // GetGroupSummaries returns the summaries for the groups
 // created by the given uid.
 func GetGroupSummaries(uid int64) (GroupSummaries, error) {
