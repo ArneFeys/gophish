@@ -27,7 +27,7 @@ e.g.
 ```
 time="2020-07-29T01:24:08Z" level=info msg="Please login with the username admin and the password 4304d5255378177d"
 ```
-
+test
 Releases of Gophish prior to v0.10.1 have a default username of `admin` and password of `gophish`.
 
 ### Documentation
