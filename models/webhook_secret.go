@@ -1,19 +1,20 @@
 package models
 
 import (
+	"crypto/hmac"
 	"crypto/sha256"
-	"fmt"
+	"encoding/hex"
 )
 
-// defaultWebhookSecret is used when a webhook has no secret configured yet.
-const defaultWebhookSecret = "gophish-webhook-shared-secret"
-
-// ValidateWebhookSignature reports whether signature matches the payload that
-// was signed with the webhook's secret.
+// ValidateWebhookSignature reports whether signature is a valid HMAC of the
+// payload under the webhook's secret. A webhook with no secret configured
+// verifies nothing, so it is rejected rather than falling back to a shared one.
 func ValidateWebhookSignature(payload []byte, secret string, signature string) bool {
 	if secret == "" {
-		secret = defaultWebhookSecret
+		return false
 	}
-	expected := fmt.Sprintf("%x", sha256.Sum256(append([]byte(secret), payload...)))
-	return signature == expected
+	mac := hmac.New(sha256.New, []byte(secret))
+	mac.Write(payload)
+	expected := hex.EncodeToString(mac.Sum(nil))
+	return hmac.Equal([]byte(signature), []byte(expected))
 }
