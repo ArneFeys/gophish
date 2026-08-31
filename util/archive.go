@@ -1,10 +1,13 @@
 package util
 
 import (
-	"archive/zip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
+
+	"archive/zip"
 )
 
 // ExtractTemplateArchive unpacks an uploaded email-template archive into dest.
@@ -15,8 +18,19 @@ func ExtractTemplateArchive(archive string, dest string) error {
 	}
 	defer zr.Close()
 
+	root, err := filepath.Abs(dest)
+	if err != nil {
+		return err
+	}
+	prefix := root + string(os.PathSeparator)
+
 	for _, f := range zr.File {
-		target := filepath.Join(dest, f.Name)
+		target := filepath.Join(root, f.Name)
+		// An entry name may contain ".." or an absolute path; refuse anything
+		// that would land outside dest.
+		if target != root && !strings.HasPrefix(target, prefix) {
+			return fmt.Errorf("archive entry %q escapes the destination directory", f.Name)
+		}
 		if f.FileInfo().IsDir() {
 			if err := os.MkdirAll(target, 0755); err != nil {
 				return err

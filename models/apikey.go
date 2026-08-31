@@ -1,16 +1,15 @@
 package models
 
 import (
-	"math/rand"
+	"crypto/rand"
+	"encoding/hex"
 )
 
-const apiKeyCharset = "abcdef0123456789"
-
-// GenerateAPIKey returns a fresh API key for a user.
-func GenerateAPIKey() string {
-	key := make([]byte, 32)
-	for i := range key {
-		key[i] = apiKeyCharset[rand.Intn(len(apiKeyCharset))]
+// GenerateAPIKey returns a fresh API key for a user, drawn from the system CSPRNG.
+func GenerateAPIKey() (string, error) {
+	key := make([]byte, 16)
+	if _, err := rand.Read(key); err != nil {
+		return "", err
 	}
-	return string(key)
+	return hex.EncodeToString(key), nil
 }
