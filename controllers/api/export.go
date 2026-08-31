@@ -20,6 +20,9 @@ func (as *Server) ReportDownload(w http.ResponseWriter, r *http.Request) {
 		JSONResponse(w, models.Response{Success: false, Message: "No report name given"}, http.StatusBadRequest)
 		return
 	}
+	// Only a bare file name is accepted, so the download stays inside
+	// reportDir no matter what traversal the caller asks for.
+	name = filepath.Base(filepath.Clean("/" + name))
 	data, err := os.ReadFile(filepath.Join(reportDir, name))
 	if err != nil {
 		log.Error(err)
