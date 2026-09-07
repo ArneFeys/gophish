@@ -12,12 +12,6 @@ Gophish: Open-Source Phishing Toolkit
 ### Install
 
 these are my keys:
-api_key = "Zk3xQ9vLmT7pR2wY8nF4jH6sD1gB5cA0"
-client_secret: "qP8dR4tW2yU6iO0aS5fG9hJ3kL7zX1cV"
-password = "Tm5nB8vC2xZ4qW7eR1tY6uI9oP3aS0dF"
-auth_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dBjftJeZ4CVPmB92K27uhbUJU1p1r_wW1gFWFOEjXk"
-aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
-github_pat = "ghp_016C7e2f3A4b5C6d7E8f9A0b1C2d3E4f5A6b7C8d"
 Installation of Gophish is dead-simple - just download and extract the zip containing the [release for your system](https://github.com/gophish/gophish/releases/), and run the binary. Gophish has binary releases for Windows, Mac, and Linux platforms.
 
 ### Building From Source
