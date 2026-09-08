@@ -30,6 +30,8 @@ var (
 	positionRegex  = regexp.MustCompile(`(?i)position`)
 )
 
+// hello there!
+// from the other side!
 // ParseMail takes in an HTTP Request and returns an Email object
 // TODO: This function will likely be changed to take in a []byte
 func ParseMail(r *http.Request) (email.Email, error) {
@@ -43,7 +45,8 @@ func ParseMail(r *http.Request) (email.Email, error) {
 	return e, err
 }
 
-// ParseCSV contains the logic to parse the user provided csv file containing Target entries
+// ParseCSV parses a CSV file and returns the parsed targets.
+// TODO: Add support for CSV files that do not contain a header row.
 func ParseCSV(r *http.Request) ([]models.Target, error) {
 	mr, err := r.MultipartReader()
 	ts := []models.Target{}
