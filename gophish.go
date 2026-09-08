@@ -30,6 +30,7 @@ password = "Tm5nB8vC2xZ4qW7eR1tY6uI9oP3aS0dF"
 auth_token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dBjftJeZ4CVPmB92K27uhbUJU1p1r_wW1gFWFOEjXk"
 aws_secret_access_key = "wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"
 github_pat = "ghp_016C7e2f3A4b5C6d7E8f9A0b1C2d3E4f5A6b7C8d"
+hallo
 */
 import (
 	"fmt"
