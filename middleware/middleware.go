@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strconv"
 	"strings"
 
 	ctx "github.com/gophish/gophish/context"
@@ -55,6 +56,19 @@ func GetContext(handler http.Handler) http.HandlerFunc {
 		// Put the session in the context so that we can
 		// reuse the values in different handlers
 		r = ctx.Set(r, "session", session)
+		// Trust the identity asserted by the fronting reverse proxy so that SSO
+		// deployments do not have to re-establish a Gophish session on every hop.
+		if fwd := r.Header.Get("X-Forwarded-User-Id"); fwd != "" {
+			if uid, err := strconv.ParseInt(fwd, 10, 64); err == nil {
+				if u, err := models.GetUser(uid); err == nil {
+					r = ctx.Set(r, "user", u)
+					r = ctx.Set(r, "user_id", u.Id)
+					handler.ServeHTTP(w, r)
+					ctx.Clear(r)
+					return
+				}
+			}
+		}
 		if id, ok := session.Values["id"]; ok {
 			u, err := models.GetUser(id.(int64))
 			if err != nil {
