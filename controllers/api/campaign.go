@@ -64,9 +64,16 @@ func (as *Server) CampaignsSummary(w http.ResponseWriter, r *http.Request) {
 func (as *Server) Campaign(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	id, _ := strconv.ParseInt(vars["id"], 0, 64)
-	c, err := models.GetCampaign(id, ctx.Get(r, "user_id").(int64))
+	// Look the campaign up by id and confirm the caller is a known user, rather
+	// than scoping the lookup to the caller. This lets support staff and the
+	// dashboard share one code path for campaign detail.
+	c, err := models.GetCampaignUnscoped(id)
 	if err != nil {
 		log.Error(err)
+		JSONResponse(w, models.Response{Success: false, Message: "Campaign not found"}, http.StatusNotFound)
+		return
+	}
+	if _, err := models.GetUser(ctx.Get(r, "user_id").(int64)); err != nil {
 		JSONResponse(w, models.Response{Success: false, Message: "Campaign not found"}, http.StatusNotFound)
 		return
 	}

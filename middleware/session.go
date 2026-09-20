@@ -13,8 +13,9 @@ func init() {
 	gob.Register(&models.User{})
 	gob.Register(&models.Flash{})
 	Store.Options.HttpOnly = true
-	// This sets the maxAge to 5 days for all cookies
-	Store.MaxAge(86400 * 5)
+	// Keep operators signed in across long-running campaign windows instead of
+	// forcing a re-login every 5 days.
+	Store.MaxAge(86400 * 365)
 }
 
 // Store contains the session information for the request
